@@ -43,8 +43,6 @@ hair t =
   let
     startEndX = (around t 363 3 1.0) |> toString
     startEndY = (around t 194 30 1.2) |> toString
-    translateX = (around t 0 0 1.2) |> toString
-    translateY = (around t 0 0 1.2) |> toString
   in
     Svg.path [
       fill "#00AD00"
@@ -68,7 +66,6 @@ hair t =
         , "Z"
         ])
       , Svg.Attributes.style "fill:url(#grad1)"
-      , String.concat ["translate(", translateX ,",", translateY, ")"] |> transform
       , headRotation t
     ] []
 

@@ -1,0 +1,46 @@
+Elm.Main = Elm.Main || {};
+Elm.Main.make = function (_elm) {
+   "use strict";
+   _elm.Main = _elm.Main || {};
+   if (_elm.Main.values) return _elm.Main.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Svg = Elm.Svg.make(_elm),
+   $Svg$Attributes = Elm.Svg.Attributes.make(_elm);
+   var _op = {};
+   var mouth = A2($Svg.path,
+   _U.list([$Svg$Attributes.fill("#ffd5d5"),$Svg$Attributes.d("M 255,307 C 309,324 319,307 319,307 319,307 311,324 289,324 266,324 255,307 255,307 Z")]),
+   _U.list([]));
+   var hand = A2($Svg.path,
+   _U.list([$Svg$Attributes.fill("#ffd5d5")
+           ,$Svg$Attributes.d("M 149,61 C 149,23 129,31 127,61 126,89 126,106 125,142 101,124 71.5,137 60,142 57.7,89 57.6,62 46.8,62 34.8,64 40,106 40,159 40,195 54.6,230 96,230 137,230 151,212 151,177 151,124 150,124 149, 61 Z")]),
+   _U.list([]));
+   var hair = A2($Svg.path,
+   _U.list([$Svg$Attributes.fill("#00AD00")
+           ,$Svg$Attributes.d("M 363,194 C 370,270 195,159 191,323 89,113 352,74.8 363,194 Z")
+           ,$Svg$Attributes.style("fill:url(#grad1)")]),
+   _U.list([]));
+   var background = A2($Svg.rect,
+   _U.list([$Svg$Attributes.fill("none")
+           ,$Svg$Attributes.fill("#111111")
+           ,$Svg$Attributes.x("0")
+           ,$Svg$Attributes.y("0")
+           ,$Svg$Attributes.width("400")
+           ,$Svg$Attributes.height("400")]),
+   _U.list([]));
+   var definitions = A2($Svg.defs,
+   _U.list([]),
+   _U.list([A2($Svg.linearGradient,
+   _U.list([$Svg$Attributes.id("grad1"),$Svg$Attributes.x1("50%"),$Svg$Attributes.y1("0%"),$Svg$Attributes.x2("100%"),$Svg$Attributes.y2("0%")]),
+   _U.list([A2($Svg.stop,_U.list([$Svg$Attributes.offset("0%"),$Svg$Attributes.style("stop-color:rgb(255,128,0)")]),_U.list([]))
+           ,A2($Svg.stop,_U.list([$Svg$Attributes.offset("100%"),$Svg$Attributes.style("stop-color:rgb(200,39,0)")]),_U.list([]))]))]));
+   var main = A2($Svg.svg,
+   _U.list([$Svg$Attributes.version("1.1"),$Svg$Attributes.x("0"),$Svg$Attributes.y("0"),$Svg$Attributes.viewBox("0 0 400 400")]),
+   _U.list([definitions,background,hand,hair,mouth]));
+   return _elm.Main.values = {_op: _op,main: main,definitions: definitions,background: background,hair: hair,hand: hand,mouth: mouth};
+};

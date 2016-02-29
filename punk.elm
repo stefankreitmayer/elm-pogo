@@ -8,13 +8,22 @@ main =
 
 scene t =
   svg [ version "1.1", x "0", y "0", viewBox "0 0 400 400" ]
-    [
-      definitions
-      , background
-      , hair t
-      , mouth t
-      , hand t
+    (svgNodes t)
+
+svgNodes t =
+  List.concat
+    [ [ definitions , background , mouth t ]
+    , allMoek t
+    , [ hair t , hand t ]
     ]
+
+allMoek t =
+  [ moek t 1.1 2.5
+  , moek t 1.3 2.4
+  , moek t 1.6 2.3
+  , moek t 1.4 2.2
+  , moek t 1.5 2.1
+  ]
 
 definitions =
   defs [] [
@@ -27,13 +36,15 @@ definitions =
 background =
   rect [fill "none", fill "#111111", x "0", y "0", width "400", height "400"] []
 
+headRotation t =
+  String.concat ["rotate(", (around t 0 10 0.5) |> toString, ")"] |> transform
+
 hair t =
   let
     startEndX = (around t 363 3 1.0) |> toString
     startEndY = (around t 194 30 1.2) |> toString
     translateX = (around t 0 0 1.2) |> toString
     translateY = (around t 0 0 1.2) |> toString
-    rotate = (around t 0 10 0.5) |> toString
   in
     Svg.path [
       fill "#00AD00"
@@ -57,7 +68,8 @@ hair t =
         , "Z"
         ])
       , Svg.Attributes.style "fill:url(#grad1)"
-      , String.concat ["translate(", translateX ,",", translateY, ") rotate(", rotate ,")"] |> transform
+      , String.concat ["translate(", translateX ,",", translateY, ")"] |> transform
+      , headRotation t
     ] []
 
 around t center fluctuation frequency =
@@ -76,41 +88,59 @@ hand t =
       , String.concat ["translate(", translateX ,",", translateY, ") scale(", scaleX ,",", scaleY, ")"] |> transform
     ] []
 
+mouthX1 t = (around t 255 -4 0.2)
+mouthY1 t = (around t 307 40 1.2)
+mouthX2 t = (around t 319 5 0.2)
+mouthY2 t = (around t 307 40 1.2)
+
 mouth t =
   let
-    startEndX = (around t 255 -4 0.2) |> toString
-    startEndY = (around t 307 40 1.2) |> toString
-    tipX = (around t 319 5 0.2) |> toString
-    tipY = (around t 307 40 1.2) |> toString
+    x1 = mouthX1 t |> toString
+    y1 = mouthY1 t |> toString
+    x2 = mouthX2 t |> toString
+    y2 = mouthY2 t |> toString
     bottomY = (around t 324 40 1.2) |> toString
-    rotate = (around t 0 10 0.5) |> toString
   in
     Svg.path [
       fill "#ffd5d5"
       , d (String.join " "
         [ "M"
-        , startEndX
-        , startEndY
+        , x1
+        , y1
         , "C"
         , (around t 309 0 3) |> toString--
         , bottomY
-        , tipX
-        , tipY
-        , tipX
-        , tipY
-        , tipX
-        , tipY
+        , x2
+        , y2
+        , x2
+        , y2
+        , x2
+        , y2
         , (around t 311 0 1.2) |> toString--
         , bottomY
         , (around t 289 10 0.13) |> toString--
         , bottomY
         , (around t 266 20 0.13) |> toString--
         , bottomY
-        , startEndX
-        , startEndY
-        , startEndX
-        , startEndY
+        , x1
+        , y1
+        , x1
+        , y1
         , "Z"
         ])
-      , String.concat ["rotate(", rotate ,")"] |> transform
+      , headRotation t
     ] []
+
+moek t freqX freqY =
+  let
+    noseX = ((mouthX1 t) + (mouthX2 t)) / 2
+    x = around t noseX 56 freqX
+    y = (mouthY1 t) - 13 - (around t 0 60 freqY |> abs)
+  in
+    circle
+      [ cx (toString x)
+      , cy (toString y)
+      , r "3"
+      , fill "#ff8800"
+      , headRotation t
+      ] []

@@ -152,10 +152,10 @@ eyes t =
 
 eye t dx =
   let
-    angle = if (floor t)//1200 % 5 == 0 then
-               around t 0 10 0.2
+    angle = if (floor t)//1200 % 2 == 0 then
+               0
              else
-               around (toFloat (floor (t/1300))) 0 123 123
+               3.14
     pupilDx = -10 * (cos angle)
     pupilDy = -10 * (sin angle)
   in
@@ -194,6 +194,6 @@ eyeball t dx =
           , (toString x)
           , ","
           , eyeY t |> toString
-          , ") scale(2)"
+          , ") scale(2.2)"
           ] |> transform
       ] []

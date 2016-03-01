@@ -30,12 +30,17 @@ background =
   rect [fill "none", fill "#000000", x "0", y "0", width "400", height "400"] []
 
 headRotation t =
-  String.concat ["rotate(", (around t 0 10 0.5) |> toString, ")"]
+  let
+    msPerCycle = 1000 * 5 / 6
+  in
+    String.concat [ "rotate("
+                  , (((t + msPerCycle/4 |> floor) % (floor (msPerCycle * 2)) |> toFloat) / msPerCycle * 20 - 20 |> abs) - 10 |> toString
+                  , ")"]
 
 hair t =
   let
     startEndX = (around t 363 3 1.0) |> toString
-    startEndY = (around t 194 30 1.2) |> toString
+    startEndY = (bounce t 194 30 1.2) |> toString
   in
     Svg.path [
       fill "#00AD00"
@@ -45,15 +50,15 @@ hair t =
         , startEndY
         , "C"
         , (around t 370 0 3) |> toString--
-        , (around t 270 0 3) |> toString
+        , (bounce t 270 0 3) |> toString
         , (around t 195 50 1.2) |> toString--
-        , (around t 159 40 1.3) |> toString
+        , (bounce t 159 40 1.3) |> toString
         , (around t 191 25 1.2) |> toString--tip
-        , (around t (around t 323 20 0.7) 25 1.2) |> toString
+        , (bounce t (around t 323 20 0.7) 25 1.2) |> toString
         , (around t 89 50 1.2) |> toString--
-        , (around t (around t 113 17 2) 15 1.6) |> toString
+        , (bounce t (around t 113 17 2) 15 1.6) |> toString
         , (around t 352 10 0.9) |> toString--
-        , (around t 74.8 20 1.4) |> toString
+        , (bounce t 74.8 20 1.4) |> toString
         , startEndX
         , startEndY
         , "Z"
@@ -64,6 +69,9 @@ hair t =
 
 around t center fluctuation frequency =
   center + (sin (t / 1000 * 6.28 * frequency)) * fluctuation
+
+bounce t center fluctuation frequency =
+  center + ((abs (sin (t / 1000 * 6.28 * frequency / 2))) * 2 - 1) * fluctuation * -1
 
 hand t =
   let
@@ -80,7 +88,7 @@ hand t =
 
 mouthX1 t = (around t 258 -5 0.2)
 mouthX2 t = (around t 316 6 0.2)
-mouthY t = (around t 307 40 1.2)
+mouthY t = (bounce t 307 40 1.2)
 
 mouth t =
   let
@@ -88,7 +96,7 @@ mouth t =
     y1 = mouthY t |> toString
     x2 = mouthX2 t |> toString
     y2 = mouthY t |> toString
-    bottomY = (around t 324 40 1.2) |> toString
+    bottomY = (bounce t 324 40 1.2) |> toString
   in
     Svg.path [
       fill "#eeeeee"

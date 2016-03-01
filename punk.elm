@@ -14,16 +14,9 @@ svgNodes t =
   List.concat
     [ [ definitions , background , mouth t ]
     , allMoek t
+    , eyes t
     , [ hair t , hand t ]
     ]
-
-allMoek t =
-  [ moek t 1.1 2.5
-  , moek t 1.3 2.4
-  , moek t 1.6 2.3
-  , moek t 1.4 2.2
-  , moek t 1.5 2.1
-  ]
 
 definitions =
   defs [] [
@@ -85,9 +78,9 @@ hand t =
       , String.concat ["translate(", translateX ,",", translateY, ") scale(", scaleX ,",", scaleY, ")"] |> transform
     ] []
 
-mouthX1 t = (around t 255 -4 0.2)
+mouthX1 t = (around t 258 -5 0.2)
 mouthY1 t = (around t 307 40 1.2)
-mouthX2 t = (around t 319 5 0.2)
+mouthX2 t = (around t 316 6 0.2)
 mouthY2 t = (around t 307 40 1.2)
 
 mouth t =
@@ -128,10 +121,12 @@ mouth t =
       , headRotation t
     ] []
 
+noseX t =
+  ((mouthX1 t) + (mouthX2 t)) / 2
+
 moek t freqX freqY =
   let
-    noseX = ((mouthX1 t) + (mouthX2 t)) / 2
-    x = around t noseX 56 freqX
+    x = around t (noseX t) 56 freqX
     y = (mouthY1 t) - 13 - (around t 0 60 freqY |> abs)
   in
     circle
@@ -139,5 +134,47 @@ moek t freqX freqY =
       , cy (toString y)
       , r "3"
       , fill "#ff8800"
+      , headRotation t
+      ] []
+
+allMoek t =
+  [ moek t 1.1 2.5
+  , moek t 1.3 2.4
+  , moek t 1.6 2.3
+  , moek t 1.4 2.2
+  , moek t 1.5 2.1
+  ]
+
+eyes t =
+  List.concat
+    [ eye t -40
+    , eye t 40
+    ]
+
+eye t dx =
+  let
+    angle = if (floor t)//1200 % 5 == 0 then
+               around t 0 10 0.2
+             else
+               around (toFloat (floor (t/1300))) 0 123 123
+    pupilDx = -10 * (cos angle)
+    pupilDy = -10 * (sin angle)
+  in
+    [ eyepart t dx 0 "25" "#ffffff"
+    , eyepart t (dx+pupilDx) pupilDy "15" "#000000"
+    , eyepart t (dx+pupilDx-5) (pupilDy-2) (toString (around t 5 2 0.7)) "#ffffff"
+    , eyepart t (dx+pupilDx+5) (pupilDy+2) (toString (around t 3 -1 0.4)) "#ffffff"
+    ]
+
+eyepart t dx dy radius color =
+  let
+    x = (noseX t) + dx
+    y = (mouthY1 t) - 50 + dy
+  in
+    circle
+      [ cx (toString x)
+      , cy (toString y)
+      , r radius
+      , fill color
       , headRotation t
       ] []

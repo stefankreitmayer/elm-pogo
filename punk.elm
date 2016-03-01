@@ -27,7 +27,7 @@ definitions =
   ]
 
 background =
-  rect [fill "none", fill "#111111", x "0", y "0", width "400", height "400"] []
+  rect [fill "none", fill "#000000", x "0", y "0", width "400", height "400"] []
 
 headRotation t =
   String.concat ["rotate(", (around t 0 10 0.5) |> toString, ")"]
@@ -91,7 +91,7 @@ mouth t =
     bottomY = (around t 324 40 1.2) |> toString
   in
     Svg.path [
-      fill "#ffd5d5"
+      fill "#eeeeee"
       , d (String.join " "
         [ "M"
         , x1

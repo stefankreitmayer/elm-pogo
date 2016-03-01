@@ -79,16 +79,15 @@ hand t =
     ] []
 
 mouthX1 t = (around t 258 -5 0.2)
-mouthY1 t = (around t 307 40 1.2)
 mouthX2 t = (around t 316 6 0.2)
-mouthY2 t = (around t 307 40 1.2)
+mouthY t = (around t 307 40 1.2)
 
 mouth t =
   let
     x1 = mouthX1 t |> toString
-    y1 = mouthY1 t |> toString
+    y1 = mouthY t |> toString
     x2 = mouthX2 t |> toString
-    y2 = mouthY2 t |> toString
+    y2 = mouthY t |> toString
     bottomY = (around t 324 40 1.2) |> toString
   in
     Svg.path [
@@ -127,7 +126,7 @@ noseX t =
 moek t freqX freqY =
   let
     x = around t (noseX t) 56 freqX
-    y = (mouthY1 t) - 13 - (around t 0 60 freqY |> abs)
+    y = (mouthY t) - 13 - (around t 0 60 freqY |> abs)
   in
     circle
       [ cx (toString x)
@@ -169,7 +168,7 @@ eye t dx =
 eyepart t dx dy radius color =
   let
     x = (noseX t) + dx
-    y = (mouthY1 t) - 50 + dy
+    y = (mouthY t) - 50 + dy
   in
     circle
       [ cx (toString x)

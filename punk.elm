@@ -30,7 +30,7 @@ background =
   rect [fill "none", fill "#111111", x "0", y "0", width "400", height "400"] []
 
 headRotation t =
-  String.concat ["rotate(", (around t 0 10 0.5) |> toString, ")"] |> transform
+  String.concat ["rotate(", (around t 0 10 0.5) |> toString, ")"]
 
 hair t =
   let
@@ -59,7 +59,7 @@ hair t =
         , "Z"
         ])
       , Svg.Attributes.style "fill:url(#grad1)"
-      , headRotation t
+      , headRotation t |> transform
     ] []
 
 around t center fluctuation frequency =
@@ -67,10 +67,10 @@ around t center fluctuation frequency =
 
 hand t =
   let
-    scaleX = (around t 0.8 -0.2 1.2) |> toString
-    scaleY = (around t 0.6 0.3 1.2) |> toString
-    translateX = (around t 0 20 1.2) |> toString
-    translateY = (around t 0 -100 1.2) |> toString
+    scaleX = around t 0.8 -0.2 1.2 |> toString
+    scaleY = around t 0.6 0.3 1.2 |> toString
+    translateX = around t 0 20 1.2 |> toString
+    translateY = around t 0 -100 1.2 |> toString
   in
     Svg.path [
       fill "#ffd5d5"
@@ -117,7 +117,7 @@ mouth t =
         , y1
         , "Z"
         ])
-      , headRotation t
+      , headRotation t |> transform
     ] []
 
 noseX t =
@@ -133,7 +133,7 @@ moek t freqX freqY =
       , cy (toString y)
       , r "3"
       , fill "#ff8800"
-      , headRotation t
+      , headRotation t |> transform
       ] []
 
 allMoek t =
@@ -159,21 +159,41 @@ eye t dx =
     pupilDx = -10 * (cos angle)
     pupilDy = -10 * (sin angle)
   in
-    [ eyepart t dx 0 "25" "#ffffff"
-    , eyepart t (dx+pupilDx) pupilDy "15" "#000000"
-    , eyepart t (dx+pupilDx-5) (pupilDy-2) (toString (around t 5 2 0.7)) "#ffffff"
-    , eyepart t (dx+pupilDx+5) (pupilDy+2) (toString (around t 3 -1 0.4)) "#ffffff"
+    [ eyeball t dx
+    , eyecircle t (dx+pupilDx) pupilDy "15" "#000000"
+    , eyecircle t (dx+pupilDx-5) (pupilDy-2) (toString (around t 5 2 0.7)) "#ffffff"
+    , eyecircle t (dx+pupilDx+5) (pupilDy+2) (toString (around t 3 -1 0.4)) "#ffffff"
     ]
 
-eyepart t dx dy radius color =
+eyeY t =
+  (mouthY t) - 50
+
+eyecircle t dx dy radius color =
   let
     x = (noseX t) + dx
-    y = (mouthY t) - 50 + dy
+    y = (eyeY t) + dy
   in
     circle
       [ cx (toString x)
       , cy (toString y)
       , r radius
       , fill color
-      , headRotation t
+      , headRotation t |> transform
+      ] []
+
+eyeball t dx =
+  let
+    x = (noseX t) + dx
+  in
+    Svg.path
+      [ fill "#eeeeee"
+        , d "M -10,4 C -14,-16 14,-16 10,4 Q 0,0 -10,4"
+        , String.concat
+          [ headRotation t
+          , "translate("
+          , (toString x)
+          , ","
+          , eyeY t |> toString
+          , ") scale(2)"
+          ] |> transform
       ] []
